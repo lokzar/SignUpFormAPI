@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const SignUpForm: React.FC = () => {
     const [userType, setUserType] = useState('');
+
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -13,6 +14,8 @@ const SignUpForm: React.FC = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
+
+    //User type selection menu
     const options = [
         { label: "Select a type", value: "" },
         { label: "Researcher", value: "researcher" },
@@ -21,10 +24,12 @@ const SignUpForm: React.FC = () => {
         { label: "Service provider", value: "service_provider" }
     ];
 
+    //Updates the value from the user type selection menu
     const handleSelect: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
         setUserType(e.target.value);
     };
 
+    //Updates the string fields from the form when modified
     const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -33,6 +38,7 @@ const SignUpForm: React.FC = () => {
         }));
     };
 
+    //POST Query to signup endpoint
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
 
@@ -51,6 +57,7 @@ const SignUpForm: React.FC = () => {
         .then(response => {
             if (!response.ok) {
                 return response.text().then(text => {
+                    //Make sure to show the error that the back end is sending
                     throw new Error(`Failed to sign up: ${text}`);
                 });
             }
@@ -67,6 +74,7 @@ const SignUpForm: React.FC = () => {
     };
 
     return (
+        //Form structure
         <form className="flex flex-col justify-center items-center rounded shadow-xl mt-10 mb-10 p-8 bg-white" onSubmit={handleSubmit}>
             <div>
                 <label className="font-bold">User type</label>
@@ -121,6 +129,7 @@ const SignUpForm: React.FC = () => {
                 title="SignUp">
                 Sign me up!
             </button>
+            {/* Printing the end result of the form submission after being sent to the endpoint */}
             {message && <p className="text-green-600">{message}</p>}
             {error && <p className="text-red-600">{error}</p>}
         </form>
